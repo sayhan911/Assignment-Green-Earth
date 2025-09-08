@@ -12,6 +12,7 @@ const loadCategory = (id) => {
   } else {
     url = `https://openapi.programming-hero.com/api/category/${id}`;
   }
+  manageSpinner(true);
   fetch(url)
     .then((response) => response.json())
     .then((data) => displayCategory(data.plants));
@@ -47,7 +48,7 @@ const displayCategory = (trees) => {
       "bg-white rounded-lg shadow-md overflow-hidden flex flex-col";
     card.innerHTML = `
       <img src="${tree.image}" alt="${
-      tree.tree_name
+      tree.name
     }" class="w-full h-40 object-cover">
       <div class="p-4 flex-1 flex flex-col justify-between">
         <div>
@@ -76,6 +77,7 @@ const displayCategory = (trees) => {
     const addBtn = card.querySelector("button");
     addBtn.onclick = () => addToCart(tree);
   });
+  manageSpinner(false);
 };
 // Hover and active of categories
 const setActiveCategory = (clickedLi) => {
@@ -122,9 +124,7 @@ const updateTotal = () => {
   const cartItems = document.getElementById("cart-items").children;
 
   for (const item of cartItems) {
-    const priceText = item.querySelector("p").innerText;
-    const price = Number(priceText.split(" ")[0].slice(1));
-    total += price;
+    total += Number(item.getAttribute("data-price"));
   }
   document.getElementById("cart-total").innerText = "৳" + total;
 };
@@ -133,6 +133,7 @@ const addToCart = (tree) => {
   const li = document.createElement("li");
   li.className =
     "flex justify-between items-center bg-green-100 p-2 mb-2 rounded";
+  li.setAttribute("data-price", tree.price);
   li.innerHTML = `
     <div>
       <h2 class="text-sm font-medium mb-1">${tree.name}</h2>
@@ -151,5 +152,15 @@ const addToCart = (tree) => {
   const modal = document.getElementById("my_modal_5");
   document.getElementById("cart-success-name").innerText = tree.name;
   modal.showModal();
+};
+// spinner
+const manageSpinner = (status) => {
+  if (status === true) {
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("trees-container").classList.add("hidden");
+  } else {
+    document.getElementById("spinner").classList.add("hidden");
+    document.getElementById("trees-container").classList.remove("hidden");
+  }
 };
 loadCategories();
