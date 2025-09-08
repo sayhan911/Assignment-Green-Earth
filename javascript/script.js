@@ -6,7 +6,7 @@ const loadCategories = () => {
 };
 // load plants by category
 const loadCategory = (id) => {
-  let url = ""
+  let url = "";
   if (id === "all") {
     url = "https://openapi.programming-hero.com/api/plants";
   } else {
@@ -15,6 +15,26 @@ const loadCategory = (id) => {
   fetch(url)
     .then((response) => response.json())
     .then((data) => displayCategory(data.plants));
+};
+// load plant details
+const loadPlantDetails = async (id) => {
+  const url = `https://openapi.programming-hero.com/api/plant/${id}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  plantDetails(data.plants);
+};
+// display plant details in modal
+const plantDetails = (tree) => {
+  const detailsBox = document.getElementById("details-container");
+  detailsBox.innerHTML = `
+      <h2 class="text-2xl font-bold mb-2">${tree.name}</h2>
+      <img src="${tree.image}" alt="${tree.name}" class="w-full h-60 object-cover rounded mb-3">
+      <p class="mb-2"><span class="font-semibold">Category:</span> ${tree.category}</p>
+      <p class="mb-2"><span class="font-semibold">Price:</span> ৳${tree.price}</p>
+      <p class="text-gray-700 mb-2"><span class="font-semibold">Description:</span> ${tree.description}</p>
+      
+    `;
+  document.getElementById("my_modal_1").showModal();
 };
 // display tree cards
 const displayCategory = (trees) => {
@@ -31,7 +51,11 @@ const displayCategory = (trees) => {
     }" class="w-full h-40 object-cover">
       <div class="p-4 flex-1 flex flex-col justify-between">
         <div>
-          <h3 class="font-semibold text-lg">${tree.name}</h3>
+          <h3 onclick="loadPlantDetails(${
+            tree.id
+          })" class="font-semibold text-lg cursor-pointer hover:text-green-700 transform transition duration-300 ease-in-out">${
+      tree.name
+    }</h3>
           <p class="text-sm text-gray-600 mt-1">${tree.description.slice(
             0,
             50
@@ -43,7 +67,7 @@ const displayCategory = (trees) => {
           }</span>
           <span class="font-bold">৳${tree.price}</span>
         </div>
-        <button class="mt-3 bg-[#17803D] text-white py-2 rounded-3xl hover:bg-green-300 hover:text-black transition">
+        <button class="mt-3 bg-[#17803D] text-white py-2 rounded-3xl hover:bg-green-300 hover:text-black transform transition duration-300 ease-in-out">
           Add to Cart
         </button>
       </div>
@@ -51,7 +75,7 @@ const displayCategory = (trees) => {
     treeContainer.appendChild(card);
   });
 };
-// Hover and active
+// Hover and active of categories
 const setActiveCategory = (clickedLi) => {
   const lis = document.querySelectorAll("#categories li");
   lis.forEach((li) => {
