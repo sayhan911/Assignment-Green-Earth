@@ -2,13 +2,13 @@
 
 - **var:** values can be changed or declared again. No longer used.
 - **let:** values can be changed but cannot declare again in the same scope.
-- **const:** values can't be changed or declared again.
+- **const:** values cannot be reassigned (but objects/arrays can have their contents changed).
 
 ## Answer to Q2
 
-- **map():** loops through an array, doesn't return anything.
-- **forEach():** loops through and array and returns with transformed values
-- **filter():** loops through an array and returns items those pass the condition
+- **map():** loops through an array and returns a new array with transformed values.
+- **forEach():** loops through an array, doesn't return anything.
+- **filter():** loops through an array and returns items that pass the condition.
 - **Example**
 
 ```javascript
