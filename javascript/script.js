@@ -73,6 +73,8 @@ const displayCategory = (trees) => {
       </div>
     `;
     treeContainer.appendChild(card);
+    const addBtn = card.querySelector("button");
+    addBtn.onclick = () => addToCart(tree);
   });
 };
 // Hover and active of categories
@@ -113,5 +115,41 @@ const displayCategories = (allCategories) => {
   });
   setActiveCategory(allTrees);
   loadCategory("all");
+};
+// cart functionality
+const updateTotal = () => {
+  let total = 0;
+  const cartItems = document.getElementById("cart-items").children;
+
+  for (const item of cartItems) {
+    const priceText = item.querySelector("p").innerText;
+    const price = Number(priceText.split(" ")[0].slice(1));
+    total += price;
+  }
+  document.getElementById("cart-total").innerText = "৳" + total;
+};
+const addToCart = (tree) => {
+  const cartItems = document.getElementById("cart-items");
+  const li = document.createElement("li");
+  li.className =
+    "flex justify-between items-center bg-green-100 p-2 mb-2 rounded";
+  li.innerHTML = `
+    <div>
+      <h2 class="text-sm font-medium mb-1">${tree.name}</h2>
+      <p class="text-gray-500 text-xs">৳${tree.price} &#215; 1</p>
+    </div>
+    <div>
+      <i class="fa-solid fa-xmark text-sm font-light text-gray-500 cursor-pointer"></i>
+    </div>
+  `;
+  cartItems.appendChild(li);
+  li.querySelector("i").onclick = () => {
+    li.remove();
+    updateTotal();
+  };
+  updateTotal();
+  const modal = document.getElementById("my_modal_5");
+  document.getElementById("cart-success-name").innerText = tree.name;
+  modal.showModal();
 };
 loadCategories();
